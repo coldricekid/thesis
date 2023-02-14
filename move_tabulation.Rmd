@@ -1,0 +1,111 @@
+---
+title: "Table 1 Tabulation"
+output: word_document
+date: "`r Sys.Date()`"
+always_allow_html: true
+knit: 
+  (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_file = file.path(dirname(inputFile), paste0('Move Tabulation', format(Sys.Date(), "%m.%d.%y"), '.docx'))) })
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/janemou/Documents/thesis/data management")
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(flextable)
+```
+
+
+
+```{r move, echo=FALSE}
+move <- read_csv('Processed Data/tab_102.12.23.csv',col_types = cols())
+
+move %>%
+  mutate(
+    Relocated = recode(
+      Relocated,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    `Seriously thought about killing self in past year` = recode(
+      `Seriously thought about killing self in past year`,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    `Made plans to kill self in past year` = recode(
+      `Made plans to kill self in past year`,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    `Attempted to kill self in past year` = recode(
+      `Attempted to kill self in past year`,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    Relocated = factor(Relocated, levels = c('None', '1 time', '2 times', '3 or more times', "Don't know", 'Refused', 'Not\nApplicable'),
+    ),
+    `Seriously thought about killing self in past year` = 
+      factor(`Seriously thought about killing self in past year`,
+             levels=c('Yes', 'No', 'Not\nApplicable'))
+  ) %>%
+  tbl_cross(
+    row = Relocated,
+    col = `Seriously thought about killing self in past year`
+  ) %>%
+  as_flex_table() %>% 
+  width(j = 1, width = 50, unit = 'mm') %>% 
+  width(j = 2:4, width = 30, unit = 'mm') #%>% 
+  #set_caption(caption = 'Participants who thought about killin')
+
+
+```
+```{r move1, echo=FALSE}
+move %>% 
+  mutate(
+    Relocated = recode(
+      Relocated,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    `Made plans to kill self in past year` = recode(
+      `Made plans to kill self in past year`,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    Relocated = factor(Relocated, levels = c('None', '1 time', '2 times', '3 or more times', "Don't know", 'Refused', 'Not\nApplicable'),
+    ),
+    `Made plans to kill self in past year` = 
+      factor(`Made plans to kill self in past year`,
+             levels=c('Yes', 'No', 'Not\nApplicable'))
+  ) %>%
+  tbl_cross(
+    row = Relocated,
+    col = `Made plans to kill self in past year`
+  ) %>%
+  as_flex_table() %>% 
+  width(j = 1, width = 50, unit = 'mm') %>% 
+  width(j = 2:4, width = 30, unit = 'mm')
+  
+```
+
+```{r move2, echo=FALSE}
+move %>% 
+  mutate(
+    Relocated = recode(
+      Relocated,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    `Attempted to kill self in past year` = recode(
+      `Attempted to kill self in past year`,
+      'Not Applicable' = 'Not\nApplicable'
+    ),
+    Relocated = factor(Relocated, levels = c('None', '1 time', '2 times', '3 or more times', "Don't know", 'Refused', 'Not\nApplicable'),
+    ),
+    `Attempted to kill self in past year` = 
+      factor(`Attempted to kill self in past year`,
+             levels=c('Yes', 'No', 'Not\nApplicable'))
+  ) %>%
+  tbl_cross(
+    row = Relocated,
+    col = `Attempted to kill self in past year`
+  ) %>%
+  as_flex_table() %>% 
+  width(j = 1, width = 50, unit = 'mm') %>% 
+  width(j = 2:4, width = 30, unit = 'mm')
+```
+
